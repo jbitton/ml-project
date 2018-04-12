@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from binary_classification.svm import svm_pipeline
+from binary_classification.cart import cart_pipeline
 np.set_printoptions(threshold=np.nan)
 
 
@@ -42,5 +43,6 @@ def pipeline():
     x_test = np.hstack((x_test, np.ones((x_test.shape[0], 1))))
 
     print(svm_pipeline(x_train, y_train, x_test, y_test))
+    print(cart_pipeline(x_train, y_train, x_test, y_test))
 
 pipeline()
