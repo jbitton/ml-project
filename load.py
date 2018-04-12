@@ -12,6 +12,8 @@ def load_data():
     del aml_data['DrawID']
     y_values = aml_data['caseflag'].values
     del aml_data['caseflag']
+    for column in aml_data.columns:
+        aml_data[column].fillna(aml_data[column].mean(), inplace=True)  # missing columns replaced with avg column value
     x_values = aml_data.values
     featurizer = np.vectorize(lambda x: 1 if x == 'Yes' else -1)
     y_values = featurizer(y_values)
