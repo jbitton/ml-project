@@ -1,5 +1,5 @@
 data.csv
 .idea
-__py_cache__
+__pycache__
 .DS_Store
 venv

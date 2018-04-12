@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from binary_classification.svm import svm_pipeline
 np.set_printoptions(threshold=np.nan)
 
 
@@ -39,5 +40,7 @@ def pipeline():
     x_train, x_test, y_train, y_test = get_train_and_test(x_values, y_values)
     x_train = np.hstack((x_train, np.ones((x_train.shape[0], 1))))
     x_test = np.hstack((x_test, np.ones((x_test.shape[0], 1))))
+
+    print(svm_pipeline(x_train, y_train, x_test, y_test))
 
 pipeline()
