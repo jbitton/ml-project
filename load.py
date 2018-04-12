@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plot
 from sklearn.model_selection import train_test_split
 from binary_classification.svm import svm_pipeline
 from binary_classification.cart import cart_pipeline
@@ -44,5 +45,7 @@ def pipeline():
 
     print(svm_pipeline(x_train, y_train, x_test, y_test))
     print(cart_pipeline(x_train, y_train, x_test, y_test))
+    plot.show_data(x_train, y_train)
+
 
 pipeline()
