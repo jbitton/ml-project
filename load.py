@@ -7,7 +7,29 @@ from binary_classification.cart import cart_pipeline
 np.set_printoptions(threshold=np.nan)
 
 
-def load_data():
+def add_extra_features(x_values):
+    interaction_features = np.zeros((x_values.shape[0], 21))
+
+    for row_idx in range(x_values.shape[0]):
+        col_idx = 0
+        for i in range(36, 42):
+            for j in range(i, 42):
+                interaction_features[row_idx][col_idx] = x_values[row_idx][i] * x_values[row_idx][j]
+                col_idx += 1
+
+    return np.concatenate((x_values, interaction_features), axis=1)
+
+
+def add_total_genes(x_values):
+    total_gene_values = np.zeros((x_values.shape[0], 1))
+    for i in range(x_values.shape[0]):
+        for j in range(36):
+            total_gene_values[i] += x_values[i][j]
+
+    return np.concatenate((x_values, total_gene_values), axis=1)
+
+
+def load_data(add_features=False):
     """
     :return: a tuple of featurized x and y values
     """
@@ -17,7 +39,11 @@ def load_data():
     del aml_data['caseflag']
     for column in aml_data.columns:
         aml_data[column].fillna(aml_data[column].mean(), inplace=True)  # missing columns replaced with avg column value
-    x_values = aml_data.values
+        if aml_data[column].var() <= 0:
+            del aml_data[column]
+    x_values = add_total_genes(aml_data.values)
+    if add_features:
+        x_values = add_extra_features(x_values)
     featurizer = np.vectorize(lambda x: 1 if x == 'Yes' else -1)
     y_values = featurizer(y_values)
     return x_values, y_values
@@ -44,8 +70,8 @@ def pipeline():
     x_test = np.hstack((x_test, np.ones((x_test.shape[0], 1))))
 
     print(svm_pipeline(x_train, y_train, x_test, y_test))
-    print(cart_pipeline(x_train, y_train, x_test, y_test))
-    plot.show_data(x_train, y_train)
+    # print(cart_pipeline(x_train, y_train, x_test, y_test))
+    # plot.show_data(x_train, y_train)
 
 
 pipeline()
