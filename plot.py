@@ -1,8 +1,12 @@
-import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(style="ticks", color_codes=True)
+sns.set_style("whitegrid")
+sns.set_context("poster")
 
 
-def show_data(x_train, y_train):
+def show_data():
     """
     Plots features pairwise, of the following set:
     - average allelic fraction
@@ -11,53 +15,36 @@ def show_data(x_train, y_train):
     - white blood cell count
     - hemoglobin
     - age
-
-    :param x_train: x training values (2d numpy array)
-    :param y_train: y traiing values (1d numpy array)
     """
 
-    # Isolate features
-    genes = x_train[:, 0]
-    for i in range(1, 45):
-        genes += x_train[:, i]
-    genes = genes / 45
-    hematocrit = x_train[:, 45]
-    platelet = x_train[:, 46]
-    wbc = x_train[:, 47]
-    hemoglobin = x_train[:, 48]
-    age = x_train[:, 49]
+    # Put data into pandas dataframe
+    aml_data = pd.read_csv('data.csv', index_col=0)
 
-    # Mask by +1, -1
-    yplus = np.ma.masked_where(y_train <= 0, y_train)
-    yminus = np.ma.masked_where(y_train > 0, y_train)
-    genes = (genes[~np.array(yplus.mask)], genes[~np.array(yminus.mask)])
-    hematocrit = (hematocrit[~np.array(yplus.mask)], hematocrit[~np.array(yminus.mask)])
-    platelet = (platelet[~np.array(yplus.mask)], platelet[~np.array(yminus.mask)])
-    wbc = (wbc[~np.array(yplus.mask)], wbc[~np.array(yminus.mask)])
-    hemoglobin = (hemoglobin[~np.array(yplus.mask)], hemoglobin[~np.array(yminus.mask)])
-    age = (age[~np.array(yplus.mask)], age[~np.array(yminus.mask)])
+    # Convert everything to numeric values
+    del aml_data['DrawID']
+    d = {'Yes': 1, 'No': -1, 'caseflag': 'caseflag'}
+    aml_data['caseflag'].replace(d, inplace=True)
 
-    features = [genes, hematocrit, platelet, wbc, hemoglobin, age]
-    labels = ["Genes", "Hematocrit", "Platelet", "White Blood Cell", "Hemoglobin", "Age"]
+    # Fill in missing values
+    for column in aml_data.columns:
+        aml_data[column].fillna(aml_data[column].mean(), inplace=True)
 
-    # Grid
-    num_rows = 2
-    num_cols = 2
-    fig_index = 0
+    # Add all gene columns togther, then delete them
+    aml_data['Total'] = aml_data['Gene.1']
+    for i in range(2, 46):
+        col_header = 'Gene.'+str(i)
+        aml_data['Total'] += aml_data[col_header]
+    for i in range(1, 46):
+        col_header = 'Gene.' + str(i)
+        del aml_data[col_header]
 
-    # Make all plots
-    for i in range(6):
-        for j in range(i+1, 6):
-            if fig_index % 4 == 0:
-                plt.figure(figsize=(10, 10))
-                plt.subplots_adjust(hspace=.8, wspace=.8)
-            plt.subplot(num_rows, num_cols, (fig_index % 4) + 1, facecolor='white')
-            plt.scatter(features[i][0], features[j][0], marker='+', c='r', label='+1 labels for training set')
-            plt.scatter(features[i][1], features[j][1], marker=r'$-$', c='b', label='-1 labels for training set')
-            plt.xlabel(labels[i])
-            plt.ylabel(labels[j])
-            fig_index += 1
-            if fig_index % 4 == 0 and fig_index != 0:
-                plt.show()
-
+    # Plot pairwise
+    sns.set(style='whitegrid')
+    cols = ['caseflag', 'Total', 'Age', 'WBC', 'PLATELET', 'HEMOGLBN', 'HEMATOCR']
+    sns.pairplot(aml_data[cols],
+                 hue='caseflag',  # different caseflags have different colors
+                 markers=['.', r'$+$'],  # markers
+                 palette=['#22d822', '#8A2BE2'],  # -, + colors in hex
+                 plot_kws={"s": 250},  # marker size (100 default)
+                 size=5.0)  # size of each subplot
     plt.show()

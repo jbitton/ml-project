@@ -70,8 +70,8 @@ def pipeline():
     x_test = np.hstack((x_test, np.ones((x_test.shape[0], 1))))
 
     print(svm_pipeline(x_train, y_train, x_test, y_test))
-    # print(cart_pipeline(x_train, y_train, x_test, y_test))
-    # plot.show_data(x_train, y_train)
+    print(cart_pipeline(x_train, y_train, x_test, y_test))
+    plot.show_data()
 
 
 pipeline()
