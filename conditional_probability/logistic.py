@@ -1,5 +1,5 @@
-import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import log_loss
 from util import results
 
 
@@ -32,21 +32,6 @@ def logisitic_classification(prob, x_test):
     return prob.predict(x_test)
 
 
-def probability_loss(y_pred, y_test):
-    """
-    :param y_pred: the predicted y-values
-    :param y_test: the actual y-values
-    :return: the logistic loss
-    """
-    total_log_loss = 0
-    for i in range(len(y_test)):
-        if y_test[i] == 1:
-            total_log_loss += -np.log(y_pred[i][0])
-        else:
-            total_log_loss += -np.log(1 - y_pred[i][0])
-    return total_log_loss
-
-
 def logistic_pipeline(x_train, y_train, x_test, y_test):
     """
     :param x_train: the x-values we want to train on (2D numpy array)
@@ -58,4 +43,4 @@ def logistic_pipeline(x_train, y_train, x_test, y_test):
     prob = logistic_training(x_train, y_train)
     y_pred = logistic_probability(prob, x_test)
     y_pred_class = logisitic_classification(prob, x_test)
-    return results(y_pred_class, y_test), probability_loss(y_pred, y_test)
+    return results(y_pred_class, y_test), log_loss(y_test, y_pred)

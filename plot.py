@@ -1,4 +1,4 @@
-import pandas as pd
+import preprocessing
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="ticks", color_codes=True)
@@ -17,30 +17,19 @@ def show_data():
     - age
     """
 
-    # Put data into pandas dataframe
-    aml_data = pd.read_csv('data.csv', index_col=0)
+    # Preprocessing
+    aml_data = preprocessing.load_csv()
+    preprocessing.fill_missing_values(aml_data)
+    preprocessing.add_total_genes(aml_data)
 
-    # Convert everything to numeric values
-    del aml_data['DrawID']
-    d = {'Yes': 1, 'No': -1, 'caseflag': 'caseflag'}
-    aml_data['caseflag'].replace(d, inplace=True)
-
-    # Fill in missing values
+    # Delete gene columns
     for column in aml_data.columns:
-        aml_data[column].fillna(aml_data[column].mean(), inplace=True)
-
-    # Add all gene columns togther, then delete them
-    aml_data['Total'] = aml_data['Gene.1']
-    for i in range(2, 46):
-        col_header = 'Gene.'+str(i)
-        aml_data['Total'] += aml_data[col_header]
-    for i in range(1, 46):
-        col_header = 'Gene.' + str(i)
-        del aml_data[col_header]
+        if 'Gene.' in column:
+            del aml_data[column]
 
     # Plot pairwise
     sns.set(style='whitegrid')
-    cols = ['caseflag', 'Total', 'Age', 'WBC', 'PLATELET', 'HEMOGLBN', 'HEMATOCR']
+    cols = ['caseflag', 'Total.Genes', 'Age', 'WBC', 'PLATELET', 'HEMOGLBN', 'HEMATOCR']
     sns.pairplot(aml_data[cols],
                  hue='caseflag',  # different caseflags have different colors
                  markers=['.', r'$+$'],  # markers
