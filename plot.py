@@ -44,7 +44,6 @@ def show_data():
     sns.pairplot(aml_data[cols],
                  hue='caseflag',  # different caseflags have different colors
                  markers=['.', r'$+$'],  # markers
-                 palette=['#22d822', '#8A2BE2'],  # -, + colors in hex
                  plot_kws={"s": 250},  # marker size (100 default)
                  size=5.0)  # size of each subplot
     plt.show()
