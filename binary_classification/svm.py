@@ -1,5 +1,5 @@
 from sklearn import svm
-from util import results
+from util import results, roc_results
 
 
 def svm_training(x_train, y_train):
@@ -8,7 +8,7 @@ def svm_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn SVM Classifier object that can now be used for predictions
     """
-    clf = svm.SVC(kernel="rbf", C=1.089655, gamma=0.018571)
+    clf = svm.SVC(kernel="rbf", C=29.285714285714285, gamma=0.02481628922836824, random_state=10, probability=True)
     clf.fit(x_train, y_train)
     return clf
 
@@ -32,4 +32,5 @@ def svm_pipeline(x_train, y_train, x_test, y_test):
     """
     clf = svm_training(x_train, y_train)
     y_pred = svm_classification(clf, x_test)
+    roc_results(y_pred, y_test, 'SVM')
     return results(y_pred, y_test)
