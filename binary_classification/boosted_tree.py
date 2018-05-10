@@ -34,4 +34,4 @@ def xgb_pipeline(x_train, y_train, x_test, y_test):
     clf = xgb_training(x_train, y_train)
     y_pred = xgb_classification(clf, x_test)
     roc_results(y_pred, y_test, 'XGBoost')
-    return roc_auc_score(y_pred, y_test)
+    return roc_auc_score(y_test, y_pred)
