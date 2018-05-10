@@ -47,4 +47,4 @@ def logistic_pipeline(x_train, y_train, x_test, y_test):
     y_pred = logistic_probability(prob, x_test)
     y_pred_class = logisitic_classification(np.copy(y_pred[:, 1]), threshold=0.5657625157625158)
     roc_results(y_pred[:, 1], y_test, 'Logistic Regression')
-    return roc_auc_score(y_test, y_pred_class)
+    return roc_auc_score(y_test, y_pred[:, 1])

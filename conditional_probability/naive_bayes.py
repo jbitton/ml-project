@@ -47,4 +47,4 @@ def nb_pipeline(x_train, y_train, x_test, y_test):
     y_pred = nb_probability(prob, x_test)
     y_pred_class = nb_classification(np.copy(y_pred[:, 1]))
     roc_results(y_pred[:, 1], y_test, 'Gaussian Naive Bayes')
-    return roc_auc_score(y_test, y_pred_class)
+    return roc_auc_score(y_test, y_pred[:, 1])

@@ -67,8 +67,8 @@ def get_train_and_test(x_values, y_values):
     :param y_values: the featurized values of y
     :return: a tuple containing x_train, x_test, y_train, and y_test
     """
-    test_set_size = int(len(y_values) * 0.2)
-    return train_test_split(x_values, y_values, test_size=test_set_size, random_state=0)
+    test_set_size = int(len(y_values) * 0.35)
+    return train_test_split(x_values, y_values, test_size=test_set_size, random_state=8)
 
 
 def standardize_features(x_train, x_test):
