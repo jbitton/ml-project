@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
-from util import results, roc_results
+from sklearn.metrics import roc_auc_score
+from util import roc_results
 
 
 def nb_training(x_train, y_train):
@@ -40,10 +41,10 @@ def nb_pipeline(x_train, y_train, x_test, y_test):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :param x_test:  the x-values we want to test on (2D numpy array)
     :param y_test:  the y-values that correspond to x_test (1D numpy array)
-    :return: the number of correct predictions, incorrect predictions, the percent correct, and the loss
+    :return: the roc auc score
     """
     prob = nb_training(x_train, y_train)
     y_pred = nb_probability(prob, x_test)
     y_pred_class = nb_classification(np.copy(y_pred[:, 1]))
     roc_results(y_pred[:, 1], y_test, 'Gaussian Naive Bayes')
-    return results(y_pred_class, y_test)
+    return roc_auc_score(y_pred_class, y_test)

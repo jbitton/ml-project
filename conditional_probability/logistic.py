@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import log_loss
-from util import results, roc_results
+from sklearn.metrics import roc_auc_score
+from util import roc_results
 
 
 def logistic_training(x_train, y_train):
@@ -10,7 +10,7 @@ def logistic_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn LogisticRegression object that can now be used for predictions
     """
-    prob = LogisticRegression(C=1.2412060301507537, penalty='l2', solver='liblinear', random_state=10)
+    prob = LogisticRegression(random_state=0)
     prob.fit(x_train, y_train)
     return prob
 
@@ -41,10 +41,10 @@ def logistic_pipeline(x_train, y_train, x_test, y_test):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :param x_test:  the x-values we want to test on (2D numpy array)
     :param y_test:  the y-values that correspond to x_test (1D numpy array)
-    :return: the number of correct predictions, incorrect predictions, the percent correct, and the loss
+    :return: the roc auc score
     """
     prob = logistic_training(x_train, y_train)
     y_pred = logistic_probability(prob, x_test)
     y_pred_class = logisitic_classification(np.copy(y_pred[:, 1]), threshold=0.5657625157625158)
     roc_results(y_pred[:, 1], y_test, 'Logistic Regression')
-    return results(y_pred_class, y_test), log_loss(y_test, y_pred)
+    return roc_auc_score(y_pred_class, y_test)
