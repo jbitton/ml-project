@@ -47,12 +47,13 @@ class RF(BaseModel):
         importances = self.model.feature_importances_
         std = np.std([tree.feature_importances_ for tree in self.model.estimators_], axis=0)
         indices = np.argsort(importances)[::-1]
+        indices = [i for i in indices if importances[i] > 0]
 
-        plt.figure(figsize=(11, 8))
+        plt.figure()
         plt.title("Feature Importances: Random Forest")
-        plt.bar(range(self.x_train.shape[1]), importances[indices], color="r", yerr=std[indices], align="center")
-        plt.xticks(range(self.x_train.shape[1]), columns[indices], rotation=90)
-        plt.xlim([-1, self.x_train.shape[1]])
+        plt.bar(range(len(indices)), importances[indices], color="r", yerr=std[indices], align="center")
+        plt.xticks(range(len(indices)), columns[indices], rotation=90)
+        plt.xlim([-1, len(indices)])
         plt.xlabel('Feature')
         plt.ylabel('Feature Importance')
         plt.show()
