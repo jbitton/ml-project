@@ -9,7 +9,8 @@ def rf_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn random forest classifier object that can now be used for predictions
     """
-    clf = RandomForestClassifier(random_state=0)
+    clf = RandomForestClassifier(n_estimators=100, criterion='gini', max_depth=4, max_features='log2',
+                                 min_samples_split=25, min_samples_leaf=7, bootstrap=True, random_state=0)
     clf.fit(x_train, y_train)
     return clf
 

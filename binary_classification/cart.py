@@ -9,7 +9,8 @@ def cart_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn CART Classifier object that can now be used for predictions
     """
-    clf = tree.DecisionTreeClassifier(random_state=0)
+    clf = tree.DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=5, min_samples_split=2,
+                                      min_samples_leaf=1, min_impurity_decrease=0.023, random_state=0)
     clf.fit(x_train, y_train)
     return clf
 

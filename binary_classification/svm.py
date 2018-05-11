@@ -9,7 +9,7 @@ def svm_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn SVM Classifier object that can now be used for predictions
     """
-    clf = svm.SVC(random_state=0)
+    clf = svm.SVC(kernel='sigmoid', C=87, gamma=0.0212, random_state=0)
     clf.fit(x_train, y_train)
     return clf
 

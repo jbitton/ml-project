@@ -3,7 +3,6 @@ data.csv
 __pycache__
 .DS_Store
 venv
-*.ipynb
 *.pkl
 *.png
 *.dot

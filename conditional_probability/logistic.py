@@ -10,7 +10,7 @@ def logistic_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn LogisticRegression object that can now be used for predictions
     """
-    prob = LogisticRegression(random_state=0)
+    prob = LogisticRegression(penalty='l1', C=0.185, solver='saga', fit_intercept=True, random_state=0)
     prob.fit(x_train, y_train)
     return prob
 

@@ -23,7 +23,7 @@ def roc_results(y_pred, y_test, model_type):
     plt.figure(figsize=(8, 6))
     lw = 2
     plt.plot(fpr, tpr,
-             lw=lw, label=f'{model_type} (AUC = {round(auc(fpr, tpr), 2)})')
+             lw=lw, label=f'{model_type} (AUC = {round(auc(fpr, tpr), 3)})')
     plt.plot([0, 1], [0, 1], lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
