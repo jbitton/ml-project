@@ -1,10 +1,10 @@
-from sklearn.tree import DecisionTreeClassifier
+import xgboost as xgb
 from sklearn.metrics import roc_auc_score
 from util import roc_results, results
 from base_model import BaseModel
 
 
-class CART(BaseModel):
+class XGB(BaseModel):
     def __init__(self, dataset, params):
         """
         :param dataset: contains, x_train, y_train, x_test, y_test (in that order)
@@ -13,7 +13,7 @@ class CART(BaseModel):
         super().__init__(dataset, params)
 
     def train(self):
-        self.model = DecisionTreeClassifier(**self.params)
+        self.model = xgb.XGBClassifier(**self.params)
         self.model.fit(self.x_train, self.y_train)
 
     def predict(self):
@@ -28,5 +28,5 @@ class CART(BaseModel):
         """
         self.train()
         y_pred = self.predict()
-        roc_results(y_pred, self.y_test, 'CART')
+        roc_results(y_pred, self.y_test, 'XGBoost')
         return roc_auc_score(self.y_test, y_pred), results(y_pred, self.y_test)
