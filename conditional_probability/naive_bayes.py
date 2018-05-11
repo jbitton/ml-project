@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import roc_auc_score
-from util import roc_results
+from util import roc_results, results
 
 
 def nb_training(x_train, y_train):
@@ -10,7 +10,7 @@ def nb_training(x_train, y_train):
     :param y_train: the y-values that correspond to x_train (1D numpy array)
     :return: sklearn GaussianNB object that can now be used for predictions
     """
-    prob = GaussianNB()
+    prob = GaussianNB([0.50833, 0.49167])
     prob.fit(x_train, y_train)
     return prob
 
@@ -47,4 +47,4 @@ def nb_pipeline(x_train, y_train, x_test, y_test):
     y_pred = nb_probability(prob, x_test)
     y_pred_class = nb_classification(np.copy(y_pred[:, 1]))
     roc_results(y_pred[:, 1], y_test, 'Gaussian Naive Bayes')
-    return roc_auc_score(y_test, y_pred[:, 1])
+    return roc_auc_score(y_test, y_pred[:, 1]), results(y_pred_class, y_test)

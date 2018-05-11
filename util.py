@@ -15,7 +15,7 @@ def results(y_pred, y_test):
             num_right += 1
         else:
             num_wrong += 1
-    return num_right, num_wrong, (num_right/(num_right + num_wrong))
+    return num_right/(num_right + num_wrong)
 
 
 def roc_results(y_pred, y_test, model_type):

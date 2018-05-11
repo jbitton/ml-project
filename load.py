@@ -3,7 +3,7 @@ from binary_classification.svm import svm_pipeline
 from binary_classification.cart import cart_pipeline
 from binary_classification.boosted_tree import xgb_pipeline
 from binary_classification.random_forests import rf_pipeline
-from conditional_probability.logistic import logistic_pipeline
+from conditional_probability.logistic import lr_pipeline
 from conditional_probability.naive_bayes import nb_pipeline
 from preprocessing import preprocessing, get_train_and_test, standardize_features
 
@@ -20,12 +20,12 @@ def pipeline():
     x_train, x_test, y_train, y_test = get_train_and_test(x_values, y_values)
     x_train, x_test = standardize_features(x_train, x_test)
 
-    print(svm_pipeline(x_train, y_train, x_test, y_test))
-    print(cart_pipeline(x_train, y_train, x_test, y_test))
-    print(xgb_pipeline(x_train, y_train, x_test, y_test))
-    print(rf_pipeline(x_train, y_train, x_test, y_test))
-    print(logistic_pipeline(x_train, y_train, x_test, y_test))
-    print(nb_pipeline(x_train, y_train, x_test, y_test))
+    print("SVM:  ", svm_pipeline(x_train, y_train, x_test, y_test))
+    print("CART: ", cart_pipeline(x_train, y_train, x_test, y_test))
+    print("XGB:  ", xgb_pipeline(x_train, y_train, x_test, y_test))
+    print("RF:   ", rf_pipeline(x_train, y_train, x_test, y_test))
+    print("LOG:  ", lr_pipeline(x_train, y_train, x_test, y_test))
+    print("NB:   ", nb_pipeline(x_train, y_train, x_test, y_test))
     plot.show_data()
 
 
